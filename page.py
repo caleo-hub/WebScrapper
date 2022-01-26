@@ -43,11 +43,22 @@ class SearchResultsPage(BasePage):
         # element, but as for now it works fine
         return "No results found." not in self.driver.page_source
 
-    def get_articles_titles(self):
+    def get_papers_titles(self):
         search_result_list= PageElementObject(self.driver).getElement(SearchResultPageLocators.SEARCH_RESULTS_LIST)
-        print(search_result_list)
         papers_titles = search_result_list.find_elements(By.TAG_NAME,'h2')
-        papers_titles_text = []
+        self.papers_titles_text = []
         for element in papers_titles:
-            papers_titles_text.append(element.text)
-        return papers_titles_text
+            self.papers_titles_text.append(element.text)
+        return self.papers_titles_text
+    
+    def get_papers_link(self):
+        search_result_list= PageElementObject(self.driver).getElement(SearchResultPageLocators.SEARCH_RESULTS_LIST)
+        papers_titles = search_result_list.find_elements(By.TAG_NAME,'h2')
+        self.papers_link_text = []
+        for i,element in enumerate(papers_titles) :
+            title = self.papers_titles_text[i]
+            self.papers_link_text.append(element.find_element(By.LINK_TEXT, title))
+        return self.papers_link_text 
+
+
+

@@ -40,9 +40,10 @@ class ScienceDirectSearch(unittest.TestCase):
         assert search_results_page.is_results_found()
 
         papersData_ScienceDirect = papersData()
-        papersData_ScienceDirect.titles = search_results_page.get_articles_titles()
-        assert papersData_ScienceDirect.saveCSV()
+        papersData_ScienceDirect.titles = search_results_page.get_papers_titles()
+        papersData_ScienceDirect.links =  search_results_page.get_papers_link()
 
+        assert papersData_ScienceDirect.saveCSV()
 
 
 
