@@ -1,9 +1,17 @@
 import os
 import pandas as pd
+from urllib3 import Retry
 
 class papersData(object):
 
     def __init__(self) -> None:
+        dirName = 'data'
+        try:
+            os.makedirs('data')
+            print("Directory " , dirName ,  " Created ")
+        except FileExistsError:
+            print("Saving in " , dirName ) 
+
         self.papersDataFrame = pd.DataFrame(columns=['Title'])
     
     
@@ -16,12 +24,8 @@ class papersData(object):
         self.papersDataFrame['Title'] = titlesList
     
     def saveCSV(self):
-        dirName = 'data'
-
         try:
-            os.makedirs('data')
-            print("Directory " , dirName ,  " Created ") 
-        except FileExistsError:
-            print("Saving in " , dirName ) 
-        
-        self.papersDataFrame.to_csv('data/papersData.csv')
+            self.papersDataFrame.to_csv('data/papersData.csv')
+            return True
+        except:
+            return False

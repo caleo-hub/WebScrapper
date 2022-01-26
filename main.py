@@ -41,7 +41,7 @@ class ScienceDirectSearch(unittest.TestCase):
 
         papersData_ScienceDirect = papersData()
         papersData_ScienceDirect.titles = search_results_page.get_articles_titles()
-        papersData_ScienceDirect.saveCSV()
+        assert papersData_ScienceDirect.saveCSV()
 
 
 
