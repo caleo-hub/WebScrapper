@@ -1,4 +1,4 @@
-from operator import index
+import os
 import pandas as pd
 
 class papersData(object):
@@ -14,7 +14,14 @@ class papersData(object):
     @titles.setter
     def titles(self, titlesList):
         self.papersDataFrame['Title'] = titlesList
-
+    
     def saveCSV(self):
-        self.papersDataFrame.to_csv('\data')
+        dirName = 'data'
 
+        try:
+            os.makedirs('data')
+            print("Directory " , dirName ,  " Created ") 
+        except FileExistsError:
+            print("Saving in " , dirName ) 
+        
+        self.papersDataFrame.to_csv('data/papersData.csv')
