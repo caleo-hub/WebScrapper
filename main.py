@@ -1,13 +1,16 @@
 import unittest
 from unittest.main import main
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 import page
+from papersData import papersData
 
 class ScienceDirectSearch(unittest.TestCase):
     
 
     def setUp(self) -> None:
-        self.driver = webdriver.Chrome()
+        PATH = "C:\Program Files (x86)\chromedriver.exe"
+        self.driver = webdriver.Chrome(PATH)
         self.driver.get('https://www.sciencedirect.com')
     
     def test_search_in_page(self):
@@ -20,10 +23,25 @@ class ScienceDirectSearch(unittest.TestCase):
         main_page.search_text_element = "qa/qc software"
         main_page.click_go_button()
 
-        search_results_page = page.SearchResultsPage(self.driver)
-        #Verifies that the results page is not empty
+        
 
+
+    def test_get_SearchResults(self):
+
+        main_page = page.MainPage(self.driver)
+        main_page.search_text_element = "qa/qc software"
+        main_page.click_go_button()
+        
+        #Verifies that the results page is not empty
+        search_results_page = page.SearchResultsPage(self.driver)
         assert search_results_page.is_results_found()
+
+        papersData_ScienceDirect = papersData()
+        papersData_ScienceDirect.titles = search_results_page.get_articles_titles()
+        papersData_ScienceDirect.saveCSV()
+
+
+
 
 
     def tearDown(self) -> None:

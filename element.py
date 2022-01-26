@@ -7,7 +7,7 @@ class BasePageElement(object):
         """Sets the text to the value supplied"""
 
         driver = obj.driver
-        WebDriverWait(driver,100).until(
+        WebDriverWait(driver,10).until(
             lambda driver: driver.find_element(*self.locator))
         driver.find_element(*self.locator).clear()
         driver.find_element(*self.locator).send_keys(value)
@@ -17,11 +17,18 @@ class BasePageElement(object):
 
             driver = obj.driver
 
-            WebDriverWait(driver,100).until(
+            WebDriverWait(driver,10).until(
                 lambda driver: driver.find_element(*self.locator))
             element = driver.find_element(*self.locator)
-            return element.get_attribute("value")    
+            return element.get_attribute("value")
 
+
+
+
+
+
+    
+    
 
 
 
