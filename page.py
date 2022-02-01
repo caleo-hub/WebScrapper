@@ -45,20 +45,40 @@ class SearchResultsPage(BasePage):
 
     def get_papers_titles(self):
         search_result_list= PageElementObject(self.driver).getElement(SearchResultPageLocators.SEARCH_RESULTS_LIST)
+        search_result_wrapper = search_result_list.find_element(By.TAG_NAME,'ol')
+        all_list_items = search_result_wrapper.find_elements(By.TAG_NAME,'li')
         papers_titles = search_result_list.find_elements(By.TAG_NAME,'h2')
+
         self.papers_titles_text = []
-        for element in papers_titles:
-            self.papers_titles_text.append(element.text)
+        for item in all_list_items:
+            className = item.get_attribute('class')
+            PAPER_ITEM_CLASS=  'ResultItem col-xs-24 push-m'
+
+            if className == PAPER_ITEM_CLASS:
+                papers_title = item.find_element(By.TAG_NAME,'h2')
+                self.papers_titles_text.append(papers_title.text)
+
         return self.papers_titles_text
+
+        # for element in papers_titles:
+        #     self.papers_titles_text.append(element.text)
+        # return self.papers_titles_text
     
     def get_papers_link(self):
         search_result_list= PageElementObject(self.driver).getElement(SearchResultPageLocators.SEARCH_RESULTS_LIST)
-        papers_titles = search_result_list.find_elements(By.TAG_NAME,'h2')
-        self.papers_link_text = []
-        for i,element in enumerate(papers_titles) :
-            title = self.papers_titles_text[i]
-            self.papers_link_text.append(element.find_element(By.LINK_TEXT, title))
-        return self.papers_link_text 
+        search_result_wrapper = search_result_list.find_element(By.TAG_NAME,'ol')
+        all_list_items = search_result_wrapper.find_elements(By.TAG_NAME,'li')
+        
+        self.papers_doi = []
+        for paper in all_list_items:
+            doi = paper.get_attribute('data-doi')
+            if doi != None:
+                self.papers_doi.append(doi)
+        return self.papers_doi
+
+ 
+
+    #TO-DO get ISSN via journal link
 
 
 

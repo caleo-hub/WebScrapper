@@ -17,22 +17,9 @@ class ScienceDirectSearch(unittest.TestCase):
         self.driver = webdriver.Chrome(service=ser)
         self.driver.get('https://www.sciencedirect.com')
     
-    # def test_search_in_page(self):
-    #     #Load the main page.
-    #     main_page = page.MainPage(self.driver)
-    #     assert main_page.is_title_matches()
-
-    #     #Sets the text of search textbox
-    #     main_page.search_text_element = "qa/qc software"
-    #     main_page.click_go_button()
-
-        
-
-
     def test_get_SearchResults(self):
-
         main_page = page.MainPage(self.driver)
-        main_page.search_text_element = "qa/qc software"
+        main_page.search_text_element = "qa/qc software"#(software OR algorithm) development (control OR analysis) (computer OR engineering)
         main_page.click_go_button()
         
         #Verifies that the results page is not empty
@@ -41,8 +28,7 @@ class ScienceDirectSearch(unittest.TestCase):
 
         papersData_ScienceDirect = papersData()
         papersData_ScienceDirect.titles = search_results_page.get_papers_titles()
-        papersData_ScienceDirect.links =  search_results_page.get_papers_link()
-
+        papersData_ScienceDirect.links = search_results_page.get_papers_link()
         assert papersData_ScienceDirect.saveCSV()
 
 

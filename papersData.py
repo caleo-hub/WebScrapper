@@ -12,7 +12,7 @@ class papersData(object):
         except FileExistsError:
             print("Accessing" , self.dirName )
 
-        columns = ['Title','Link']
+        columns = ['Title']
         self.papersDataFrame = pd.DataFrame(columns=columns)
     
     
@@ -41,4 +41,5 @@ class papersData(object):
             print("Saving in" , self.dirName )
             return True
         except:
+            print("Saving Failed")
             return False
