@@ -11,3 +11,17 @@ class MainPageLocators(object):
 class SearchResultPageLocators(object):
 
     SEARCH_RESULTS_LIST = (By.ID,'srp-results-list')
+    SEARCH_RESULTS_WRAPPER = (By.TAG_NAME,'ol')
+    SEARCH_RESULTS_ALL_ITEMS= (By.TAG_NAME,'li')
+
+    PAGINATION = (By.ID,'srp-pagination')
+    PAGINATION_OPTIONS = (By.ID,'srp-pagination-options')
+
+class DOI_Locators(object):
+    DOI_Link = 'https://doi.org/'
+class API_Locators(object):
+    API = 'https://qualisapi.herokuapp.com/api/qualis/v1/issn/'
+    AREAS = {
+                    'main':['CIÊNCIA DA COMPUTAÇÃO','ENGENHARIAS I','ENGENHARIAS II','ENGENHARIAS III','ENGENHARIAS IV']
+    }
+

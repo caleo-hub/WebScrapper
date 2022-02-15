@@ -1,5 +1,9 @@
 from element import BasePageElement
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.keys import Keys
+from selenium import webdriver
+
+
 from locators import *
 
 class SearchTextElement(BasePageElement):
@@ -18,7 +22,7 @@ class MainPage(BasePage):
 
     def is_title_matches(self):
         
-        return "Science" in self.driver.title
+        return "Sucupira" in self.driver.title
 
     def click_go_button(self):
         """Triggers the search"""
@@ -43,14 +47,15 @@ class SearchResultsPage(BasePage):
         # element, but as for now it works fine
         return "No results found." not in self.driver.page_source
 
+    def find_result_list(self):
+        self._searchResultList= PageElementObject(self.driver).getElement(SearchResultPageLocators.SEARCH_RESULTS_LIST)
+        self._searchResultWrapper = self._searchResultList.find_element(By.TAG_NAME,'ol')
+        self._allList_items = self._searchResultWrapper.find_elements(By.TAG_NAME,'li')
+
     def get_papers_titles(self):
-        search_result_list= PageElementObject(self.driver).getElement(SearchResultPageLocators.SEARCH_RESULTS_LIST)
-        search_result_wrapper = search_result_list.find_element(By.TAG_NAME,'ol')
-        all_list_items = search_result_wrapper.find_elements(By.TAG_NAME,'li')
-        papers_titles = search_result_list.find_elements(By.TAG_NAME,'h2')
 
         self.papers_titles_text = []
-        for item in all_list_items:
+        for item in self._allList_items:
             className = item.get_attribute('class')
             PAPER_ITEM_CLASS=  'ResultItem col-xs-24 push-m'
 
@@ -59,26 +64,56 @@ class SearchResultsPage(BasePage):
                 self.papers_titles_text.append(papers_title.text)
 
         return self.papers_titles_text
-
-        # for element in papers_titles:
-        #     self.papers_titles_text.append(element.text)
-        # return self.papers_titles_text
     
     def get_papers_link(self):
-        search_result_list= PageElementObject(self.driver).getElement(SearchResultPageLocators.SEARCH_RESULTS_LIST)
-        search_result_wrapper = search_result_list.find_element(By.TAG_NAME,'ol')
-        all_list_items = search_result_wrapper.find_elements(By.TAG_NAME,'li')
-        
+
         self.papers_doi = []
-        for paper in all_list_items:
+        for paper in self._allList_items:
             doi = paper.get_attribute('data-doi')
             if doi != None:
-                self.papers_doi.append(doi)
+                self.papers_doi.append(DOI_Locators.DOI_Link +  doi)
         return self.papers_doi
 
- 
+    def get_ISSN(self):
+        self.papers_ISSN = []
+        for item in self._allList_items:
+            className = item.get_attribute('class')
+            PAPER_ITEM_CLASS=  'ResultItem col-xs-24 push-m'
 
-    #TO-DO get ISSN via journal link
+            if className == PAPER_ITEM_CLASS:
+                link_tag = item.find_element(By.CLASS_NAME,'subtype-srctitle-link')
+                papers_periodicURL = link_tag.get_attribute('href')
+                lastURL_Item = papers_periodicURL.split('/')[-1]
+                ISNN = lastURL_Item[0:4]+'-'+ lastURL_Item[4:8]
+                self.papers_ISSN.append(ISNN)
+
+        return self.papers_ISSN
+
+    def find_pages_numbers(self):
+        pagination= PageElementObject(self.driver).getElement(SearchResultPageLocators.PAGINATION)
+        PaginationLists = pagination.find_elements(By.TAG_NAME,'li')
+        for element in PaginationLists:
+            if element.get_attribute('class') == '':
+                return int(element.text.split()[-1])
+
+    def click_next_page(self):
+        pagination = self.driver.find_element(*SearchResultPageLocators.PAGINATION)
+        next_button = pagination.find_element(By.LINK_TEXT,'next').get_attribute('href')
+        self.driver.get(next_button)
+
+    def page_options(self):
+        paginationOptions= PageElementObject(self.driver).getElement(SearchResultPageLocators.PAGINATION_OPTIONS)
+        paginationOptions.find_element(By.LINK_TEXT,'100').click()
+
+        
+
+
+
+class SucupiraSearchPage(BasePage):
+    def is_title_matches(self):
+        return "Sucupira" in self.driver.title
+
+ 
 
 
 
