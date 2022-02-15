@@ -94,7 +94,7 @@ class SearchResultsPage(BasePage):
         PaginationLists = pagination.find_elements(By.TAG_NAME,'li')
         for element in PaginationLists:
             if element.get_attribute('class') == '':
-                return int(element.text.split()[-1])
+                return int(element.text.split()[-1]) -1
 
     def click_next_page(self):
         pagination = self.driver.find_element(*SearchResultPageLocators.PAGINATION)

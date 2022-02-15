@@ -53,8 +53,10 @@ class papersData(object):
     def appendData(self,data):
         self.papersDataFrame = pd.concat([self.papersDataFrame, pd.DataFrame(data)], ignore_index = True, axis = 0)
     
+    def cleanData(self):
+        print(self.papersDataFrame)
+        
 
-    
     def saveCSV(self):
         try:
             self.papersDataFrame.to_csv('data/papersData.csv')
